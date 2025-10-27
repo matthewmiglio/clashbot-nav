@@ -4,16 +4,21 @@ from PIL import Image, ImageTk
 import os
 import csv
 import random
+from pathlib import Path
 
 class ImageClassifier:
     def __init__(self, root):
         self.root = root
         self.root.title("Image Classifier")
 
-        # Paths
-        self.images_folder = "images"
-        self.classes_file = "image_classes.txt"
-        self.csv_file = "annotations.csv"
+        # Get the project root (parent of tools/)
+        script_dir = Path(__file__).parent
+        project_root = script_dir.parent
+
+        # Set paths relative to project root
+        self.images_folder = str(project_root / "data" / "training" / "images")
+        self.classes_file = str(project_root / "data" / "training" / "image_classes.txt")
+        self.csv_file = str(project_root / "data" / "training" / "annotations.csv")
 
         # Load classes
         self.classes = self.load_classes()
@@ -184,7 +189,14 @@ class ImageClassifier:
 
         # Disable all buttons
         for widget in self.buttons_frame.winfo_children():
-            widget.config(state=tk.DISABLED)
+            # Only disable if widget supports state option (skip Frames)
+            if isinstance(widget, tk.Button):
+                widget.config(state=tk.DISABLED)
+            else:
+                # For Frame widgets containing buttons, disable their children
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Button):
+                        child.config(state=tk.DISABLED)
 
 def main():
     root = tk.Tk()

@@ -3,16 +3,21 @@ from PIL import Image, ImageTk, ImageDraw
 import csv
 import os
 import random
+from pathlib import Path
 
 class PixelExtractor:
     def __init__(self, root):
         self.root = root
         self.root.title("Image Color Pixel Extractor")
 
-        # Paths
-        self.images_folder = "images"
-        self.annotations_file = "annotations.csv"
-        self.output_file = "page_rec_pixels.csv"
+        # Get the project root (parent of tools/)
+        script_dir = Path(__file__).parent
+        project_root = script_dir.parent
+
+        # Set paths relative to project root
+        self.images_folder = str(project_root / "data" / "training" / "images")
+        self.annotations_file = str(project_root / "data" / "training" / "annotations.csv")
+        self.output_file = str(project_root / "data" / "models" / "page_rec_pixels.csv")
 
         # Load labels and select images to process
         self.labels_to_process = self.load_labels_to_process()

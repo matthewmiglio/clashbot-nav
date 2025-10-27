@@ -3,10 +3,11 @@ import numpy as np
 from PIL import Image
 import os
 import time
+from pathlib import Path
 
 
 CONFIG = {
-    "save_dir": "images",
+    "save_dir": str(Path(__file__).parent.parent / "data" / "training" / "images"),
     "save_rate": 1,  # in seconds
 }
 
