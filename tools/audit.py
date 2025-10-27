@@ -2,13 +2,20 @@ import csv
 import os
 import ast
 from PIL import Image
+from pathlib import Path
 
 class ImageClassifierAudit:
     def __init__(self, tolerance=20):
         self.tolerance = tolerance
-        self.images_folder = "images"
-        self.annotations_file = "annotations.csv"
-        self.pixel_data_file = "page_rec_pixels.csv"
+
+        # Get the project root (parent of tools/)
+        script_dir = Path(__file__).parent
+        project_root = script_dir.parent
+
+        # Set paths relative to project root
+        self.images_folder = str(project_root / "data" / "training" / "images")
+        self.annotations_file = str(project_root / "data" / "training" / "annotations.csv")
+        self.pixel_data_file = str(project_root / "data" / "models" / "page_rec_pixels.csv")
 
         # Load data
         self.pixel_references = self.load_pixel_references()
